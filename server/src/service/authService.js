@@ -3,7 +3,7 @@ const AuthPassword = require("../util/auth/password");
 const ContactService = require("./contactService");
 const UserService = require("./userService");
 class AuthService {
-  static async registerUser(user) {
+  static async register(user) {
     let { fullname, password, contact } = user;
     const saveContact = await ContactService.saveContact(contact);
     password = await AuthPassword.passwordHash(password);
