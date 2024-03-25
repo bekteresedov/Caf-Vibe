@@ -12,4 +12,12 @@ export class AuthController {
       ).created(response);
     });
   }
+  static async login(request, response) {
+    await AuthService.login(request.body).then((data) => {
+      generateToken(data._id, data.fullname, "48h", response);
+      return new ApiResponse(
+        new AuthResponse(data, "User login successfully")
+      ).success(response);
+    });
+  }
 }

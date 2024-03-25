@@ -17,4 +17,19 @@ export class AuthService {
       contact: saveContact._id,
     });
   }
+
+  static async login(login) {
+    const { email, password } = login;
+    const findUser = await UserService.findUserByContactEmail(email);
+
+    if (
+      !findUser ||
+      findUser.contact.email !== email ||
+      !(await bcrypt.compare(password, findUser.password))
+    ) {
+      throw new APIError(`Email, or password is incorrect`, 401);
+    }
+
+    return findUser;
+  }
 }
