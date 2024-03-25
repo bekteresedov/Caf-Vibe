@@ -8,6 +8,7 @@ import { createServer } from "http";
 import path from "path";
 import { createDbConnection } from "./core/config/db.config.js";
 import errorHandlerMiddleware from "./core/middleware/validation-handler-middleware.js";
+import authRouter from "./app/auth/auth.router.js";
 
 config();
 const PORT = process.env.APP_PORT | 5000;
@@ -29,6 +30,7 @@ server.use(express.urlencoded({ extended: false }));
 server.use(express.json());
 server.use(upload.single("file"));
 const mainPath = "/api/v1";
+server.use(mainPath, authRouter);
 server.use(errorHandlerMiddleware);
 
 export function serverStart() {
