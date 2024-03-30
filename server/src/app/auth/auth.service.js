@@ -1,7 +1,11 @@
+import { sendEmail } from "../../core/utils/auth/send-mail.js";
 import { APIError } from "../../shared/dto/error-response.js";
 import { ContactService } from "../contact/contact.service.js";
 import { UserService } from "../user/user.service.js";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
+import moment from "moment";
+
 export class AuthService {
   static async register(register) {
     let { fullname, password, contact } = register;
@@ -32,4 +36,33 @@ export class AuthService {
 
     return findUser;
   }
+  static async checkEmail(email) {
+    const findEmail = await ContactService.getFindByEmail(email);
+    if (findEmail) {
+      throw new APIError("Email is already in use", 409);
+    }
+  }
+  static async forgotPassword(email) {
+    const user = ContactService.getFindByEmail(email);
+
+    if (!user) throw new APIError("Invalid User", 400);
+
+    const resetCode = crypto.randomBytes(3).toString("hex");
+
+    await sendEmail({
+      from: "caf-vibe@gmail.com",
+      to: email,
+      subject: "Hello, This Password Reset Code",
+      text: resetCode,
+    });
+    const resetInfo = {
+      code: resetCode,
+      time: moment(new Date()).add(15, "minute").format("YYYY-MM-DD HH:mm:ss"),
+    };
+    return await UserService.updateUserByEmail(email, {
+      reset: resetInfo,
+    });
+  }
+  static async resetCodeCheck(email, password) {}
+  static async resetPassword(id, newPassword) {}
 }

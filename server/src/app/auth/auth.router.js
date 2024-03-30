@@ -14,5 +14,7 @@ authRouter.post(
   AuthValidationSchemaMiddleware.login,
   AuthController.login
 );
-
+authRouter.post(`${mainPath}/logout`, AuthController.logOut);
+authRouter.get(`${mainPath}/check`, AuthController.checkEmail);
+authRouter.post(`${mainPath}/forgot-password`, AuthController.forgotPassword);
 export default authRouter;

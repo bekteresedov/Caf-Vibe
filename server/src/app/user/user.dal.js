@@ -8,4 +8,7 @@ export class UserDal {
   static async findUserByContactId(id) {
     return await userModel.findOne({ contact: id }).populate("contact");
   }
+  static async updateUserByEmail(email, user) {
+    return await userModel.updateOne({ "contact.email": email }, user);
+  }
 }
