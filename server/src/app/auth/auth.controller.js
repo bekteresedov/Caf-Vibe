@@ -6,17 +6,19 @@ import { AuthResponse } from "./dto/auth.dto.js";
 export class AuthController {
   static async register(request, response) {
     await AuthService.register(request.body).then((data) => {
-      generateToken(data._id, data.fullname, "48h", response);
+      generateToken(data._id, data.fullname, "1m", response);
       return new ApiResponse(
-        new AuthResponse(data, "User registered successfully")
+        new AuthResponse(data),
+        "User registered successfully"
       ).created(response);
     });
   }
   static async login(request, response) {
     await AuthService.login(request.body).then((data) => {
-      generateToken(data._id, data.fullname, "48h", response);
+      generateToken(data._id, data.fullname, "1m", response);
       return new ApiResponse(
-        new AuthResponse(data, "User login successfully")
+        new AuthResponse(data),
+        "User login successfully"
       ).success(response);
     });
   }
@@ -41,35 +43,13 @@ export class AuthController {
     const { email } = request.body;
     await AuthService.forgotPassword(email);
     return new ApiResponse(null, "Please Check Your Mailbox").success(response);
-    //     return new ApiResponse<null>(null, "Please Check Your Mailbox").
-    //         success(response);
-
-    //     const user: IUserModel = await UserModel.findOne({ email }) as IUserModel;
-
-    //     if (!user) throw new APIError("Invalid User", 400)
-
-    //     const resetCode: string = crypto.randomBytes(3).toString("hex");
-
-    //     await sendEmail(
-    //         {
-    //             from: "youremail@gmail.com",
-    //             to: email,
-    //             subject: "Password Reset",
-    //             text: resetCode,
-    //         }
-    //     );
-    //     await UserModel.updateOne(
-    //         { email },
-    //         {
-    //             reset: {
-    //                 code: resetCode,
-    //                 time: moment(new Date())
-    //                     .add(15, "minute")
-    //                     .format("YYYY-MM-DD HH:mm:ss"),
-    //             },
-    //         }
-    //     );
-    //     return new ApiResponse<null>(null, "Please Check Your Mailbox").
-    //         success(response);
+  }
+  static async resetCodeCheck(request, response) {
+    const { email, password } = request.body;
+    const data = await AuthService.resetCodeCheck(email, password);
+    generateToken(data._id, data.fullname, "5h", response);
+    return new ApiResponse(
+      new AuthResponse(data, "You Can Reset Your Password")
+    ).created(response);
   }
 }

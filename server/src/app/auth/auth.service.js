@@ -1,3 +1,4 @@
+import { log } from "console";
 import { sendEmail } from "../../core/utils/auth/send-mail.js";
 import { APIError } from "../../shared/dto/error-response.js";
 import { ContactService } from "../contact/contact.service.js";
@@ -43,12 +44,10 @@ export class AuthService {
     }
   }
   static async forgotPassword(email) {
-    const user = ContactService.getFindByEmail(email);
+    const user = await UserService.findUserByContactEmail(email);
 
     if (!user) throw new APIError("Invalid User", 400);
-
     const resetCode = crypto.randomBytes(3).toString("hex");
-
     await sendEmail({
       from: "caf-vibe@gmail.com",
       to: email,
@@ -59,10 +58,23 @@ export class AuthService {
       code: resetCode,
       time: moment(new Date()).add(15, "minute").format("YYYY-MM-DD HH:mm:ss"),
     };
-    return await UserService.updateUserByEmail(email, {
+    return await UserService.updateUserById(user._id, {
       reset: resetInfo,
     });
   }
-  static async resetCodeCheck(email, password) {}
+  static async resetCodeCheck(email, password) {
+    const userInfo = await UserService.findUserByContactEmail(email);
+    if (!userInfo) throw new APIError("Invalid Code", 401);
+
+    const dbTime = moment(userInfo.reset.time);
+    const nowTime = moment(new Date());
+
+    const timeDiff = dbTime.diff(nowTime, "minutes");
+
+    if (timeDiff <= 0 || userInfo.reset.code !== password)
+      throw new APIError("Invalid Code time", 401);
+
+    return userInfo;
+  }
   static async resetPassword(id, newPassword) {}
 }

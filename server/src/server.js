@@ -9,6 +9,9 @@ import path from "path";
 import { createDbConnection } from "./core/config/db.config.js";
 import errorHandlerMiddleware from "./core/middleware/validation-handler-middleware.js";
 import authRouter from "./app/auth/auth.router.js";
+import moment from "moment-timezone";
+
+moment.tz.setDefault("Asia/Baku");
 
 config();
 const PORT = process.env.APP_PORT | 5000;

@@ -12,7 +12,7 @@ export class UserService {
     }
     return await UserDal.findUserByContactId(contact._id);
   }
-  static async updateUserByEmail(email, user) {
-    return UserDal.updateUserByEmail(email, user);
+  static async updateUserById(id, user) {
+    return UserDal.updateUserById(id, user);
   }
 }
