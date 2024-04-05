@@ -12,6 +12,13 @@ export class UserService {
     }
     return await UserDal.findUserByContactId(contact._id);
   }
+  static async findUserByRole(role) {
+    const user = await UserDal.findUserByRole(role);
+    if (!user) {
+      return null;
+    }
+    return user;
+  }
   static async updateUserById(id, user) {
     return UserDal.updateUserById(id, user);
   }

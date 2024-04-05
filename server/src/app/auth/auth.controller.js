@@ -37,7 +37,7 @@ export class AuthController {
   }
   static async checkEmail(request, response) {
     await AuthService.checkEmail(request.query.email);
-    return new ApiResponse(null, "You can continue").success(response);
+    return new ApiResponse(null, "Email is found").success(response);
   }
   static async forgotPassword(request, response) {
     const { email } = request.body;

@@ -12,6 +12,11 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
+    },
     reset: {
       code: {
         type: String,

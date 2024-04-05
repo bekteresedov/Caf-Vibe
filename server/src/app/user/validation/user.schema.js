@@ -20,4 +20,5 @@ export const userValidationSchema = Joi.object({
     "object.base": "Contact information is invalid",
     "any.required": "Contact information is required",
   }),
+  role: Joi.string().valid("admin", "user").default("user"),
 });

@@ -16,7 +16,15 @@ authRouter.post(
 );
 authRouter.post(`${mainPath}/logout`, AuthController.logOut);
 authRouter.get(`${mainPath}/check`, AuthController.checkEmail);
-authRouter.post(`${mainPath}/forgot-password`, AuthController.forgotPassword);
-authRouter.post(`${mainPath}/reset-code-check`, AuthController.resetCodeCheck);
+authRouter.post(
+  `${mainPath}/forgot-password`,
+  AuthValidationSchemaMiddleware.forgotPassword,
+  AuthController.forgotPassword
+);
+authRouter.post(
+  `${mainPath}/reset-code-check`,
+  AuthValidationSchemaMiddleware.resetCodeCheck,
+  AuthController.resetCodeCheck
+);
 
 export default authRouter;

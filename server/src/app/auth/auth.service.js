@@ -9,8 +9,16 @@ import moment from "moment";
 
 export class AuthService {
   static async register(register) {
-    let { fullname, password, contact } = register;
+    let { fullname, password, contact, role } = register;
+    if (role == "admin") {
+      const user = await UserService.findUserByRole(role);
+      if (user) {
+        throw new APIError("Admin is already in use", 409);
+      }
+    }
+
     const findEmail = await ContactService.getFindByEmail(contact.email);
+
     if (findEmail) {
       throw new APIError("Email is already in use", 409);
     }
@@ -19,6 +27,7 @@ export class AuthService {
     return UserService.saveUser({
       fullname,
       password,
+      role: role,
       contact: saveContact._id,
     });
   }
@@ -39,7 +48,7 @@ export class AuthService {
   }
   static async checkEmail(email) {
     const findEmail = await ContactService.getFindByEmail(email);
-    if (findEmail) {
+    if (!findEmail) {
       throw new APIError("Email is already in use", 409);
     }
   }

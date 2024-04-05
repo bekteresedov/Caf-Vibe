@@ -12,4 +12,18 @@ export class AuthValidationSchemaMiddleware {
     );
   static register = async (request, response, next) =>
     validationHandlerMiddleware(userValidationSchema, request, response, next);
+  static forgotPassword = async (request, response, next) =>
+    validationHandlerMiddleware(
+      AuthValidationSchema.forgotPassword,
+      request,
+      response,
+      next
+    );
+  static resetCodeCheck = async (request, response, next) =>
+    validationHandlerMiddleware(
+      AuthValidationSchema.resetCodeCheck,
+      request,
+      response,
+      next
+    );
 }
