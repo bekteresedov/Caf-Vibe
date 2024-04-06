@@ -10,6 +10,7 @@ import { createDbConnection } from "./core/config/db.config.js";
 import errorHandlerMiddleware from "./core/middleware/validation-handler-middleware.js";
 import authRouter from "./app/auth/auth.router.js";
 import moment from "moment-timezone";
+import reservationRouter from "./app/reservation/reservation.router.js";
 
 moment.tz.setDefault("Asia/Baku");
 
@@ -34,6 +35,8 @@ server.use(express.json());
 server.use(upload.single("file"));
 const mainPath = "/api/v1";
 server.use(mainPath, authRouter);
+server.use(mainPath, reservationRouter);
+
 server.use(errorHandlerMiddleware);
 
 export function serverStart() {
