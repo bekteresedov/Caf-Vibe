@@ -26,4 +26,11 @@ export class AuthValidationSchemaMiddleware {
       response,
       next
     );
+  static resetPassword = async (request, response, next) =>
+    validationHandlerMiddleware(
+      AuthValidationSchema.resetPassword,
+      request,
+      response,
+      next
+    );
 }

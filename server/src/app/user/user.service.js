@@ -22,4 +22,7 @@ export class UserService {
   static async updateUserById(id, user) {
     return UserDal.updateUserById(id, user);
   }
+  static async findUserById(id) {
+    return await UserDal.findUserById(id);
+  }
 }

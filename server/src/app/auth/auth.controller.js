@@ -6,7 +6,7 @@ import { AuthResponse } from "./dto/auth.dto.js";
 export class AuthController {
   static async register(request, response) {
     await AuthService.register(request.body).then((data) => {
-      generateToken(data._id, data.fullname, "1m", response);
+      generateToken(data, "1m", response);
       return new ApiResponse(
         new AuthResponse(data),
         "User registered successfully"
@@ -15,7 +15,7 @@ export class AuthController {
   }
   static async login(request, response) {
     await AuthService.login(request.body).then((data) => {
-      generateToken(data._id, data.fullname, "1m", response);
+      generateToken(data, "1m", response);
       return new ApiResponse(
         new AuthResponse(data),
         "User login successfully"
@@ -47,9 +47,21 @@ export class AuthController {
   static async resetCodeCheck(request, response) {
     const { email, password } = request.body;
     const data = await AuthService.resetCodeCheck(email, password);
-    generateToken(data._id, data.fullname, "5h", response);
+    generateToken(data, "5h", response);
     return new ApiResponse(
       new AuthResponse(data, "You Can Reset Your Password")
     ).created(response);
+  }
+  static async resetPassword(request, response) {
+    await AuthService.resetPassword(
+      request.cookies.accessToken,
+      request.body.password
+    ).then((data) => {
+      generateToken(data, "1m", response);
+      return new ApiResponse(
+        new AuthResponse(data),
+        "Reset password  successfully"
+      ).success(response);
+    });
   }
 }

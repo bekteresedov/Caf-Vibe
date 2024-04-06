@@ -1,4 +1,3 @@
-import { log } from "console";
 import { sendEmail } from "../../core/utils/auth/send-mail.js";
 import { APIError } from "../../shared/dto/error-response.js";
 import { ContactService } from "../contact/contact.service.js";
@@ -6,6 +5,7 @@ import { UserService } from "../user/user.service.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import moment from "moment";
+import { decodedToken } from "../../core/utils/auth/decoded-token.js";
 
 export class AuthService {
   static async register(register) {
@@ -85,5 +85,17 @@ export class AuthService {
 
     return userInfo;
   }
-  static async resetPassword(id, newPassword) {}
+  static async resetPassword(token, newPassword) {
+    const deToken = await decodedToken(token);
+
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+    const result = await UserService.updateUserById(deToken._id, {
+      reset: {
+        code: null,
+        time: null,
+      },
+      password: passwordHash,
+    });
+    return result;
+  }
 }

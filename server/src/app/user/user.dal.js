@@ -18,4 +18,7 @@ export class UserDal {
       { new: true }
     );
   }
+  static async findUserById(id) {
+    return await userModel.findOne({ _id: id });
+  }
 }

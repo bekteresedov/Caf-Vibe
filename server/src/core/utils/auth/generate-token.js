@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 config();
 
 const accessSecret = process.env.ACCESS_TOKEN;
-export const generateToken = (userId, fullname, time, response) => {
-  const accessToken = jwt.sign({ userId, fullname }, accessSecret, {
+export const generateToken = ({ _id, fullname, role }, time, response) => {
+  const accessToken = jwt.sign({ _id, fullname, role }, accessSecret, {
     expiresIn: time,
     algorithm: "HS512",
   });

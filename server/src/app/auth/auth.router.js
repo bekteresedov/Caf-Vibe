@@ -26,5 +26,10 @@ authRouter.post(
   AuthValidationSchemaMiddleware.resetCodeCheck,
   AuthController.resetCodeCheck
 );
+authRouter.post(
+  `${mainPath}/reset-password`,
+  AuthValidationSchemaMiddleware.resetPassword,
+  AuthController.resetPassword
+);
 
 export default authRouter;

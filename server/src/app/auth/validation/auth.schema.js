@@ -47,4 +47,18 @@ export class AuthValidationSchema {
       "any.required": "Password is required",
     }),
   });
+  static resetPassword = Joi.object({
+    password: Joi.string()
+      .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$"))
+      .min(8)
+      .max(20)
+      .required()
+      .messages({
+        "string.pattern.base":
+          "Password must contain at least one lowercase letter, one uppercase letter, and one digit",
+        "string.min": "Password must be at least 8 characters long",
+        "string.max": "Password must be at most 20 characters long",
+        "any.required": "Password is required",
+      }),
+  });
 }
