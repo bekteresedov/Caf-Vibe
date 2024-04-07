@@ -9,7 +9,7 @@ import { decodedToken } from "../../core/utils/auth/decoded-token.js";
 
 export class AuthService {
   static async register(register) {
-    let { fullname, password, contact, role } = register;
+    let { fullname, password, email, phoneNumber, role } = register;
     if (role == "admin") {
       const user = await UserService.findUserByRole(role);
       if (user) {
@@ -17,13 +17,16 @@ export class AuthService {
       }
     }
 
-    const findEmail = await ContactService.getFindByEmail(contact.email);
+    const findEmail = await ContactService.getFindByEmail(email);
 
     if (findEmail) {
       throw new APIError("Email is already in use", 409);
     }
     password = await bcrypt.hash(password, 10);
-    const saveContact = await ContactService.saveContact(contact);
+    const saveContact = await ContactService.saveContact({
+      email,
+      phoneNumber,
+    });
     return UserService.saveUser({
       fullname,
       password,

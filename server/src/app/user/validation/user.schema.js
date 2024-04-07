@@ -1,5 +1,4 @@
 import Joi from "joi";
-import { contactValidationSchema } from "../../contact/validation/contact.schema.js";
 
 export const userValidationSchema = Joi.object({
   fullname: Joi.string().trim().required().min(4).max(20).messages({
@@ -9,16 +8,29 @@ export const userValidationSchema = Joi.object({
     "string.max": "Fullname cannot exceed 20 characters",
     "any.required": "Fullname is required",
   }),
-  password: Joi.string().required().messages({
+  password: Joi.string().trim().required().messages({
     "string.empty": "Password cannot be empty",
     "any.required": "Password is required",
   }),
-  profilePhoto: Joi.string().allow(null).default(null).messages({
+  profilePhoto: Joi.string().trim().allow(null).default(null).messages({
     "string.base": "Profile photo must be a string",
   }),
-  contact: contactValidationSchema.required().messages({
-    "object.base": "Contact information is invalid",
-    "any.required": "Contact information is required",
+  email: Joi.string()
+    .trim()
+    .email({ tlds: { allow: false } })
+    .required()
+    .messages({
+      "string.email": "Please enter a valid email address",
+      "string.empty": "Email address cannot be empty",
+      "any.required": "Email address is required",
+    }),
+  phoneNumber: Joi.string().trim().min(9).max(15).required().messages({
+    "string.pattern.base":
+      "Please enter a valid phone number (e.g. 5551234567)",
+    "string.min": "Phone Number must be at least 9 characters long",
+    "string.max": "Phone Number cannot exceed 15 characters",
+    "string.empty": "Phone number cannot be empty",
+    "any.required": "Phone number is required",
   }),
-  role: Joi.string().valid("admin", "user").default("user"),
+  role: Joi.string().trim().valid("admin", "user").default("user"),
 });

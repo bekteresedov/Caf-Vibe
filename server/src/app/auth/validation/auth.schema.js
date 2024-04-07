@@ -2,6 +2,7 @@ import Joi from "joi";
 export class AuthValidationSchema {
   static login = Joi.object({
     email: Joi.string()
+      .trim()
       .email({ tlds: { allow: false } })
       .required()
       .messages({
@@ -10,6 +11,7 @@ export class AuthValidationSchema {
         "any.required": "Email address is required",
       }),
     password: Joi.string()
+      .trim()
       .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$"))
       .min(8)
       .max(20)
@@ -24,6 +26,7 @@ export class AuthValidationSchema {
   });
   static forgotPassword = Joi.object({
     email: Joi.string()
+      .trim()
       .email({ tlds: { allow: false } })
       .required()
       .messages({
@@ -34,6 +37,7 @@ export class AuthValidationSchema {
   });
   static resetCodeCheck = Joi.object({
     email: Joi.string()
+      .trim()
       .email({ tlds: { allow: false } })
       .required()
       .messages({
@@ -41,7 +45,7 @@ export class AuthValidationSchema {
         "string.empty": "Email address cannot be empty",
         "any.required": "Email address is required",
       }),
-    password: Joi.string().min(6).max(6).required().messages({
+    password: Joi.string().trim().min(6).max(6).required().messages({
       "string.min": "Password must be at least 6 characters long",
       "string.max": "Password must be at most 6 characters long",
       "any.required": "Password is required",
@@ -49,6 +53,7 @@ export class AuthValidationSchema {
   });
   static resetPassword = Joi.object({
     password: Joi.string()
+      .trim()
       .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$"))
       .min(8)
       .max(20)

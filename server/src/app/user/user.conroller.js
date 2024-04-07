@@ -11,13 +11,16 @@ export class UserController {
       throw new APIError("Nah! Access", 401);
     }
     const data = await UserService.findUserById(request.params.id);
-
     return new ApiResponse(
       new UserResponse(data),
       "Get Self Profile successfully"
     ).success(response);
   }
   static async updateSelfProfile(request, response) {
-    return UserDal.updateUserById(id, user);
+    const deToken = await decodedToken(request.cookies.accessToken);
+    if (deToken._id != request.params.id) {
+      throw new APIError("Nah! Access", 401);
+    }
+    return response.json({ satisfies: true });
   }
 }

@@ -1,4 +1,5 @@
 import { APIError } from "../../shared/dto/error-response.js";
+import { objectTrims } from "../../shared/utils/object.trim.js";
 import { ReservationDal } from "./reservation.dal.js";
 
 export class ReservationService {
@@ -10,7 +11,7 @@ export class ReservationService {
     return data;
   }
   static async save(reservation) {
-    return ReservationDal.save(reservation);
+    return ReservationDal.save(objectTrims(reservation));
   }
   static async delete(id) {
     const data = await ReservationService.findReservationById(id);
