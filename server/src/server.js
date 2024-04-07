@@ -11,6 +11,7 @@ import errorHandlerMiddleware from "./core/middleware/validation-handler-middlew
 import authRouter from "./app/auth/auth.router.js";
 import moment from "moment-timezone";
 import reservationRouter from "./app/reservation/reservation.router.js";
+import userRouter from "./app/user/user.router.js";
 
 moment.tz.setDefault("Asia/Baku");
 
@@ -36,6 +37,7 @@ server.use(upload.single("file"));
 const mainPath = "/api/v1";
 server.use(mainPath, authRouter);
 server.use(mainPath, reservationRouter);
+server.use(mainPath, userRouter);
 
 server.use(errorHandlerMiddleware);
 
