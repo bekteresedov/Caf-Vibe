@@ -12,7 +12,7 @@ import authRouter from "./app/auth/auth.router.js";
 import moment from "moment-timezone";
 import reservationRouter from "./app/reservation/reservation.router.js";
 import userRouter from "./app/user/user.router.js";
-
+import bodyParser from "body-parser";
 moment.tz.setDefault("Asia/Baku");
 
 config();
@@ -27,7 +27,7 @@ const upload = multer({
 
 const server = express();
 export const serverApp = createServer(server);
-
+server.use(bodyParser.urlencoded({ extended: true }));
 server.use(cookieParser());
 server.disable("x-powered-by");
 server.use(cors());
