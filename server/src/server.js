@@ -13,6 +13,7 @@ import moment from "moment-timezone";
 import reservationRouter from "./app/reservation/reservation.router.js";
 import userRouter from "./app/user/user.router.js";
 import bodyParser from "body-parser";
+import categoryRouter from "./app/category/category.router.js";
 moment.tz.setDefault("Asia/Baku");
 
 config();
@@ -38,6 +39,7 @@ const mainPath = "/api/v1";
 server.use(mainPath, authRouter);
 server.use(mainPath, reservationRouter);
 server.use(mainPath, userRouter);
+server.use(mainPath, categoryRouter);
 
 server.use(errorHandlerMiddleware);
 
